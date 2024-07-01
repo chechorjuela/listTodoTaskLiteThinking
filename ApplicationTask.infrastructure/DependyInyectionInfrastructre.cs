@@ -27,14 +27,15 @@ public static class DependyInyectionInfrastructre
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            options.UseSqlServer(connectionString);
         }, ServiceLifetime.Scoped);
         
         services.AddTransient<IDbContextFactory, ApplicationDbContextFactory>(s =>
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseMySql(
+            var connectionString = configuration.GetConnectionString("ConnectionString");
+
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(
                     connectionString,
-                    ServerVersion.AutoDetect(connectionString),
                     b =>
                     {
                         b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
