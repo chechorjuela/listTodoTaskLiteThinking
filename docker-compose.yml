@@ -1,0 +1,6 @@
+﻿services:
+  apirest:
+    image: apirest
+    build:
+      context: .
+      dockerfile: ApiRest/Dockerfile
